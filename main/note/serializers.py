@@ -8,3 +8,7 @@ class NoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Note
         fields = '__all__'
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+
+    notes = serializers.HyperlinkedRelatedField(many=True, view_name='note-content', read_only=True)
