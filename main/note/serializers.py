@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from note.models import Note
 
-class NoteSerializer(serializers.ModelSerializer):
+class NoteSerializer(serializers.HyperlinkedModelSerializer):
 
     owner = serializers.ReadOnlyField(source="owner.username")
 
