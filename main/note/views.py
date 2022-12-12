@@ -39,4 +39,4 @@ def note_content(request, pk, format=None):
 
     if request.method == "GET":
         serializer = NoteSerializer(note)
-        return 
+        return Response(serializer.data, status=status.HTTP_200_OK)
