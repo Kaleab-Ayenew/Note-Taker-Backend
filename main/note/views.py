@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.response import Response
+from rest_framework import status
 
 from note.serializers import NoteSerializer, UserSerializer
 
@@ -22,4 +23,8 @@ def note_list(request, format=None):
         
         data = request.data
         serializer = NoteSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+
 
