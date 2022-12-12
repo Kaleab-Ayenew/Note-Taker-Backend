@@ -1,5 +1,6 @@
 from django.urls import path, include
-
+from note import views
 urlpatterns = [
-    path('api/', include('snippets.urls')),
+    path('all-notes/', ),
+    path('note-content', include(''))
 ]
