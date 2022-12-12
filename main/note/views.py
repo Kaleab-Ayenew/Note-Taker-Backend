@@ -44,4 +44,5 @@ def note_content(request, pk, format=None):
         data = request.data
         serializer = NoteSerializer(data=data)
         if serializer.is_valid():
-            
+            serializer.save()
+            return Response(serializer.validated_data)
