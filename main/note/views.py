@@ -48,3 +48,6 @@ def note_content(request, pk, format=None):
             return Response(serializer.validated_data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
