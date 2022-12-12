@@ -10,7 +10,7 @@ from rest_framework import status
 
 from note.serializers import NoteSerializer, UserSerializer
 
-api_view(['GET','POST'])
+@api_view(['GET','POST'])
 def note_list(request, format=None):
 
     if request.method == 'GET':
@@ -29,7 +29,7 @@ def note_list(request, format=None):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-api_view(['GET','PUT','DELETE'])
+@api_view(['GET','PUT','DELETE'])
 def note_content(request, pk, format=None):
 
     try:
@@ -51,3 +51,4 @@ def note_content(request, pk, format=None):
     elif request.method == "DELETE":
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
