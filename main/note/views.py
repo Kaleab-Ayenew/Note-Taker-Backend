@@ -17,4 +17,9 @@ def note_list(request, format=None):
         notes = Note.objects.all()
         serializer = NoteSerializer(notes)
         return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        
+        data = request.data
+        serializer = NoteSerializer(data=data)
 
