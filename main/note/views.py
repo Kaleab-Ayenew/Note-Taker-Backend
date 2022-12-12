@@ -30,8 +30,7 @@ def note_list(request, format=None):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 api_view(['GET','PUT','DELETE'])
-def note_content():
+def note_content(request, pk, format=None):
 
-    
-
-
+    try:
+        note = Note.objects.get(pk=pk)
