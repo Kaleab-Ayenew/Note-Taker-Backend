@@ -40,3 +40,8 @@ def note_content(request, pk, format=None):
     if request.method == "GET":
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == "PUT":
+        data = request.data
+        serializer = NoteSerializer(data=data)
+        if serializer.is_valid():
+            
