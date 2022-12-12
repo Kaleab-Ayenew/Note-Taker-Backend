@@ -9,7 +9,7 @@ class NoteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
-    notes = serializers.RelatedField(many=True, view_name='note-content', read_only=True)
+    notes = serializers.RelatedField(many=True, read_only=True)
     class Meta:
         fields = "__all__"
         model = User
