@@ -8,3 +8,6 @@ class Note(models.Model):
     content = models.TextField(blank=True, default='')
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['created']
+
