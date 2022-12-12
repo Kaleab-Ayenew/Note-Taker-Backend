@@ -10,7 +10,7 @@ from rest_framework import status
 
 from note.serializers import NoteSerializer, UserSerializer
 
-api_view['GET','POST']
+api_view(['GET','POST'])
 def note_list(request, format=None):
 
     if request.method == 'GET':
@@ -28,5 +28,10 @@ def note_list(request, format=None):
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+api_view(['GET','PUT','DELETE'])
+def note_content():
+
+    
 
 
