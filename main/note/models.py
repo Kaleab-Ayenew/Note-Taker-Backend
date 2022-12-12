@@ -9,5 +9,5 @@ class Note(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['date']
 
