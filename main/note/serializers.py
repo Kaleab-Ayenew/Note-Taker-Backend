@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from note.models import Note
+from django.contrib.auth.models import User
 
 class NoteSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -12,3 +13,7 @@ class NoteSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     notes = serializers.HyperlinkedRelatedField(many=True, view_name='note-content', read_only=True)
+
+    class Meta:
+
+        model = User
