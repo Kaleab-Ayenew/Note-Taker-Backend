@@ -34,3 +34,5 @@ def note_content(request, pk, format=None):
 
     try:
         note = Note.objects.get(pk=pk)
+    except Note.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
