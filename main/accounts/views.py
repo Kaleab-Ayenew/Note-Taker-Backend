@@ -25,7 +25,7 @@ def signup_view(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def login_view(request):
 
     login_data = request.data
@@ -50,7 +50,7 @@ def logout_view(request):
     logout_status = {"status":"ok"}
     return Response(logout_status, status=status.HTTP_200_OK)
 
-@login_required(login_url=reverse("my_login_url")) 
+@login_required(login_url=reverse(login_view)) 
 @api_view(['GET','PUT', 'DELETE'])
 def user_actions(request, username):
     user_instance = get_object_or_404(User, username=username)
