@@ -51,7 +51,16 @@ def logout_view(request):
     return Response(logout_status, status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT', 'DELETE'])
+def user_actions(request, username):
 
+    try:
+        user_instance = User.object.get(username=username)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = UserSerializer(user_instance)
+        return Response(serializer.data)
 
 
 
