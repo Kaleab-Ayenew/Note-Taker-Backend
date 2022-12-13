@@ -60,7 +60,15 @@ def user_actions(request, username):
 
     if request.method == "GET":
         serializer = UserSerializer(user_instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == "PUT":
+        serializer = UserSerializer(user_instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == "DELETE":
+        user_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
