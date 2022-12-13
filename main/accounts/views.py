@@ -38,10 +38,10 @@ def login_view(request):
             login(request, user_instance)
             login_data = serializer.data
             login_data['status'] = "ok"
-            return Response(login_status, status=status.HTTP_200_OK)
+            return Response(login_data, status=status.HTTP_200_OK)
         else:
             login_data = {"status":"failed"}
-            return Response(login_status, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(login_data, status=status.HTTP_401_UNAUTHORIZED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
