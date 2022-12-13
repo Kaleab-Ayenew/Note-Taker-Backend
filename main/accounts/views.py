@@ -27,23 +27,19 @@ def signup_view(request):
 def login_view(request):
 
     login_data = request.data
-    serializer = UserSerializer(data=login_data)
 
-    if serializer.is_valid():
-        user_name = serializer.data['username']
-        password = serializer.data['password']
+    user_name = request.data['username']
+    password = request.data['password']
 
-        user_instance = authenticate(request, username=user_name, password=password)
-        if user_instance is not None:
-            login(request, user_instance)
-            login_data = serializer.data
-            login_data['status'] = "ok"
-            return Response(login_data, status=status.HTTP_200_OK)
-        else:
-            login_data = {"status":"failed"}
-            return Response(login_data, status=status.HTTP_401_UNAUTHORIZED)
+    user_instance = authenticate(request, username=user_name, password=password)
+    if user_instance is not None:
+        login(request, user_instance)
+        login_data = request.data
+        login_data['status'] = "ok"
+        return Response(login_data, status=status.HTTP_200_OK)
     else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        login_data = {"status":"failed"}
+        return Response(login_data, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 def logout_view(request):
