@@ -11,7 +11,7 @@ class NoteSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     notes = serializers.RelatedField(many=True, queryset= Note.objects.all())
     class Meta:
-        fields = "__all__"
+        fields = ['id', 'username', 'notes']
         model = User
 
 # class NoteSerializer(serializers.HyperlinkedModelSerializer):
