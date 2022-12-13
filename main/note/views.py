@@ -1,6 +1,7 @@
 from note.models import Note
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
 
 #DRF Imports
 
@@ -64,3 +65,5 @@ def login_view(request):
 
     if user is not None:
         login(request, user)
+    else:
+        return redirect('note_list_url')
