@@ -7,6 +7,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404
+from django.contrib.auth.decorators import login_required
 
 #Application imports
 from accounts.serializers import UserSerializer
@@ -40,13 +41,14 @@ def login_view(request):
     else:
         login_data = {"status":"failed"}
         return Response(login_data, status=status.HTTP_401_UNAUTHORIZED)
-
+@login_required
 @api_view(['POST'])
 def logout_view(request):
     logout(request)
     logout_status = {"status":"ok"}
     return Response(logout_status, status=status.HTTP_200_OK)
 
+@login_required
 @api_view(['GET','PUT', 'DELETE'])
 def user_actions(request, username):
     user_instance = get_object_or_404(User, username=username)
