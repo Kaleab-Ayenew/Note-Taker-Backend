@@ -57,13 +57,16 @@ def note_content(request, pk, format=None):
 @api_view(['GET','POST'])
 def login_view(request):
 
-    login_data = request.data
-    user_username = login_data['username']
-    user_password = login_data['password']
+    if request.method == "POST":
+        login_data = request.data
+        user_username = login_data['username']
+        user_password = login_data['password']
 
-    user = authenticate(username=user_username, password=user_password)
+        user = authenticate(username=user_username, password=user_password)
 
-    if user is not None:
-        login(request, user)
-    else:
-        return redirect('note_list_url')
+        if user is not None:
+            login(request, user)
+        else:
+            return redirect('note_list_url')
+    elif request.method == "GET":
+        
