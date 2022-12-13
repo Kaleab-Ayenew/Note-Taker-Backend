@@ -27,6 +27,9 @@ def signup_view(request):
 
 @api_view(['GET','POST'])
 def login_view(request):
+    if request.method == "GET":
+        return Response({"status":"please login"})
+        
 
     login_data = request.data
 
