@@ -34,8 +34,11 @@ def login_view(request):
 
         user_instance = authenticate(request, username=user_name, password=password)
         if user_instance is not None:
-
             login(request, user_instance)
+            return redirect('/') #Give some location to redirect the User after Login
+        else:
+            return redirect('/') #A Location to redirect to if the Login Fails(Or some other mechanism)
+
 
 
     
