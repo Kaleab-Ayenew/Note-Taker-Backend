@@ -6,7 +6,7 @@ from rest_framework import status
 #DJANGO IMPORTS
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404, get_list_or_404
 
 #Application imports
 from accounts.serializers import UserSerializer
