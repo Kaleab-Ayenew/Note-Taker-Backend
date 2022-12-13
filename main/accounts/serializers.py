@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from note.models import Note
 
 class UserSerializer(serializers.ModelSerializer):
-    # notes = serializers.RelatedField(many=True, queryset= Note.objects.all())
+    notes = serializers.RelatedField(many=True, read_only=True)
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
