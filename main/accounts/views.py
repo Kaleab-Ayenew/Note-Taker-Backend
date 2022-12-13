@@ -35,9 +35,11 @@ def login_view(request):
         user_instance = authenticate(request, username=user_name, password=password)
         if user_instance is not None:
             login(request, user_instance)
-            return redirect('/') #Give some location to redirect the User after Login
+            login_status = {"status":"ok"}
+            return Response(login_status, status=status.HTTP_202_ACCEPTED)
         else:
-            return redirect('/') #A Location to redirect to if the Login Fails(Or some other mechanism)
+            login_status = {"status":"failed"}
+            return Response(login_status)
 
 
 
