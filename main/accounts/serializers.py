@@ -6,5 +6,5 @@ class UserSerializer(serializers.ModelSerializer):
     notes = serializers.RelatedField(many=True, queryset= Note.objects.all())
     password = serializers.CharField(write_only=True)
     class Meta:
-        fields = ['id', 'username', 'notes']
+        fields = ['id', 'username', 'password', 'email', 'notes']
         model = User
