@@ -9,7 +9,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.response import Response
 from rest_framework import status
 
-from note.serializers import NoteSerializer, UserSerializer
+from note.serializers import NoteSerializer
 
 @api_view(['GET','POST'])
 def note_list(request, format=None):
