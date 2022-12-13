@@ -39,7 +39,7 @@ def login_view(request):
             return Response(login_status, status=status.HTTP_202_ACCEPTED)
         else:
             login_status = {"status":"failed"}
-            return Response(login_status)
+            return Response(login_status, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
