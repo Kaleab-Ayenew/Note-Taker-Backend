@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 #Application imports
 from accounts.serializers import UserSerializer
 
-api_view(['POST'])
+@api_view(['POST'])
 def sign_up(request):
 
     user_data = request.data
@@ -20,6 +20,10 @@ def sign_up(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     
 
 
