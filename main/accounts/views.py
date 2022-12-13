@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 #Application imports
 from accounts.serializers import UserSerializer
@@ -39,7 +39,8 @@ def login_view(request):
     user_instance = authenticate(request, username=user_name, password=password)
     if user_instance is not None:
         login(request, user_instance)
-        login_data = request.data
+        login_data = {}
+        login_data['username'] = request.data['username']
         login_data['status'] = "ok"
         return Response(login_data, status=status.HTTP_200_OK)
     else:
@@ -53,7 +54,8 @@ def logout_view(request):
     logout_status = {"status":"ok"}
     return Response(logout_status, status=status.HTTP_200_OK)
 
-@login_required(login_url=reverse("/")) 
+
+@login_required(login_url=reverse_lazy("login_url"))
 @api_view(['GET','PUT', 'DELETE'])
 def user_actions(request, username):
     user_instance = get_object_or_404(User, username=username)
