@@ -42,7 +42,7 @@ def note_content(request, pk, format=None):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
         data = request.data
-        serializer = NoteSerializer(data=data)
+        serializer = NoteSerializer(note,data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.validated_data)
