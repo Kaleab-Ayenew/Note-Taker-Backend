@@ -5,7 +5,7 @@ from note.serializers import NoteSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     # notes = NoteSerializer(many=True, read_only=True)
-    notes = PrimaryKeyRelatedField(many=True, read_only=True)
+    notes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
