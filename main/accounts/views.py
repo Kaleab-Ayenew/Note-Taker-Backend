@@ -44,6 +44,12 @@ def login_view(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def logout_view(request):
+    logout(request)
+    logout_status = {"status":"ok"}
+    return Response(logout_status, status=status.HTTP_200_OK)
+
 
 
 
