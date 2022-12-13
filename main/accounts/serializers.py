@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from note.models import Note
+from note.serializers import NoteSerializer
 
 class UserSerializer(serializers.ModelSerializer):
-    notes = serializers.RelatedField(many=True, read_only=True)
+    notes = NoteSerializer(many=True, read_only=True)
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
