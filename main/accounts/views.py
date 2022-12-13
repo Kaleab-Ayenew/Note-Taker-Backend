@@ -50,6 +50,9 @@ def logout_view(request):
     logout_status = {"status":"ok"}
     return Response(logout_status, status=status.HTTP_200_OK)
 
+@api_view(['GET','PUT', 'DELETE'])
+
+
 
 
 
