@@ -5,6 +5,15 @@ from note.models import Note
 class UserSerializer(serializers.ModelSerializer):
     notes = serializers.RelatedField(many=True, queryset= Note.objects.all())
     password = serializers.CharField(write_only=True)
+
+    def create(self, validated_data):
+        new_user_name = validated_data['username']
+        new_password = validated_data['password']
+        new_email = validated_data['email']
+
+        new_user = User.objects.create_user(username=new_user_name,password=new_password, email=new_email)
+        return new_user
+
     class Meta:
         fields = ['id', 'username', 'password', 'email', 'notes']
         model = User
