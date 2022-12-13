@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         new_password = validated_data['password']
         new_email = validated_data['email']
 
-        new_user = User.objects.create_user(username=new_user_name,password=new_password, email=new_email)
+        new_user = User.objects.create_user(username=new_user_name, password=new_password, email=new_email)
         return new_user
 
     class Meta:
