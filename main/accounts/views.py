@@ -36,10 +36,11 @@ def login_view(request):
         user_instance = authenticate(request, username=user_name, password=password)
         if user_instance is not None:
             login(request, user_instance)
-            login_status = {"status":"ok"}
+            login_data = serializer.data
+            login_data['status'] = "ok"
             return Response(login_status, status=status.HTTP_200_OK)
         else:
-            login_status = {"status":"failed"}
+            login_data = {"status":"failed"}
             return Response(login_status, status=status.HTTP_401_UNAUTHORIZED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
