@@ -22,7 +22,8 @@ def signup_view(request):
         return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view
+        
+@api_view(['POST'])
 def login_view(request):
 
     login_data = request.data
@@ -36,10 +37,12 @@ def login_view(request):
         if user_instance is not None:
             login(request, user_instance)
             login_status = {"status":"ok"}
-            return Response(login_status, status=status.HTTP_202_ACCEPTED)
+            return Response(login_status, status=status.HTTP_200_OK)
         else:
             login_status = {"status":"failed"}
             return Response(login_status, status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 
 
