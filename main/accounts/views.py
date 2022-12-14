@@ -59,7 +59,7 @@ def login_view(request):
         return Response(login_data, status=status.HTTP_200_OK)
     else:
         error = {"error":"Please provide valid credentials"}
-        return Response(login_data, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # @api_view(['POST'])
