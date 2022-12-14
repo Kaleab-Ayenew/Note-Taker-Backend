@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 
 class NoteSerializer(serializers.ModelSerializer):
     owner_name = serializers.ReadOnlyField(source="owner.username")
+
     class Meta:
         model = Note
         fields = '__all__'
+        extra_kwargs = {'owner': {'write_only':True}}
 
 
 # class NoteSerializer(serializers.HyperlinkedModelSerializer):
