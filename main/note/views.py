@@ -23,8 +23,9 @@ def note_list(request, format=None):
         return Response(serializer.data)
     
     elif request.method == 'POST':
-        
+
         data = request.data
+        request_user_id = request.user.id
         serializer = NoteSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
