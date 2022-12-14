@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from note.serializers import NoteSerializer
+from note.permissions import OwnsThisObject
 
 @api_view(['GET','POST'])
 def note_list(request, format=None):
