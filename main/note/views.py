@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import permission_classes
 
 from note.serializers import NoteSerializer
 from note.permissions import OwnsThisObject
