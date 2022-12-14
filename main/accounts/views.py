@@ -77,10 +77,3 @@ def user_actions(request, username):
     else:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-
-
-
-
-    
-
-
