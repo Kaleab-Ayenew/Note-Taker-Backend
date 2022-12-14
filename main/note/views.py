@@ -45,6 +45,7 @@ def note_content(request, pk, format=None):
     if request.method == "GET":
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_200_OK)
+        
     elif request.method == "PUT":
         data = request.data.dict()
         request_user_id = request.user.id
@@ -52,7 +53,7 @@ def note_content(request, pk, format=None):
         serializer = NoteSerializer(note,data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.validated_data)
+            return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == "DELETE":
