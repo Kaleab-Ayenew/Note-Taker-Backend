@@ -35,6 +35,7 @@ def note_list(request, format=None):
             print("The Serializer is valid")
             serializer.save()
             print("Serializer has been saved")
+            print(serializer.validated_data)
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
