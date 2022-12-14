@@ -14,7 +14,6 @@ from note.serializers import NoteSerializer
 from note.permissions import OwnsThisObject
 
 @api_view(['GET','POST'])
-@permission_classes((OwnsThisObject))
 def note_list(request, format=None):
 
     if request.method == 'GET':
