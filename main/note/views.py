@@ -30,6 +30,7 @@ def note_list(request, format=None):
         data['owner'] = request_user_id
         print(data)
         serializer = NoteSerializer(data=data)
+        print('I have passed to here')
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
