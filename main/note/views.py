@@ -39,13 +39,15 @@ def note_content(request, pk, format=None):
 
     try:
         note = Note.objects.get(pk=pk)
+        if note.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
     except Note.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == "GET":
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
     elif request.method == "PUT":
         data = request.data.dict()
         request_user_id = request.user.id
