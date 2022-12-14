@@ -28,6 +28,7 @@ def note_list(request, format=None):
         request_user_id = request.user.id
         print(request_user_id,'this is the id')
         data['owner'] = request_user_id
+        print(data)
         serializer = NoteSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
