@@ -24,10 +24,9 @@ def note_list(request, format=None):
     
     elif request.method == 'POST':
 
-        data = request.data
-        data = dict(data)
-        print(data)
+        data = request.data.dict()
         request_user_id = request.user.id
+        print(request_user_id,'this is the id')
         data['owner'] = request_user_id
         serializer = NoteSerializer(data=data)
         if serializer.is_valid():
