@@ -41,12 +41,14 @@ def note_content(request, pk, format=None):
         note = Note.objects.get(pk=pk)
     except Note.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
+    
     if request.method == "GET":
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        data = request.data
+        data = request.data.dict()
+        request_user_id = request.user.id
+        data['owner'] = request_user_id
         serializer = NoteSerializer(note,data=data)
         if serializer.is_valid():
             serializer.save()
