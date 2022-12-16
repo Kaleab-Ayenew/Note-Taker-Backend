@@ -19,6 +19,20 @@ class NoteList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
 
     serializer_class = NoteSerializer
 
+    def create(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            data['owner'] = request.user.id
+        except AttributeError:
+            data = request.data.dict()
+            data['owner'] = request.user.id
+
+        serializer = NoteSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
 
@@ -36,6 +50,21 @@ class NoteContent(mixins.RetrieveModelMixin,
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permission_classes = [IsAuthAndOwnsObject] #Specifying a Permission Class List overides the default in the Setting
+
+    def update(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            data['owner'] = request.user.id
+        except AttributeError:
+            data = request.data.dict()
+            data['owner'] = request.user.id
+        note = self.get_object() #You can get the Object of the View by calling this method
+        serializer = NoteSerializer(note, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
