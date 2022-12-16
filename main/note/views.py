@@ -1,4 +1,3 @@
-from note.models import Note
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
@@ -7,77 +6,42 @@ from django.shortcuts import get_object_or_404
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
+from rest_framework import permissions
 
 from note.serializers import NoteSerializer
+from note.models import Note
+from note.permissions import OwnsThisObject, IsAuthAndOwnsObject
 
 
-class NoteList(APIView):
+class NoteList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 
-    def get(self, request, format=None):
+    serializer_class = NoteSerializer
 
-        user = request.user
-        notes = Note.objects.filter(owner=user)
-        serializer = NoteSerializer(notes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        return Note.objects.filter(owner=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
     
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-        try:
-             data = request.data
-             data['owner'] = request.user.id
-        except AttributeError:
-            data = request.data.dict()
-            data['owner'] = request.user.id
-    
-        serializer = NoteSerializer(data=data)
+class NoteContent(mixins.RetrieveModelMixin, 
+                    mixins.UpdateModelMixin, 
+                    mixins.DestroyModelMixin, 
+                    generics.GenericAPIView):
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthAndOwnsObject] #Specifying a Permission Class List overides the default in the Setting
 
-class NoteContent(APIView):
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    def get_object(self, request, pk):
-        note = get_object_or_404(Note, pk=pk)
-        if request.user == note.owner:
-            return note
-        return None
-        
-    def get(self, request, pk, format=None):
-        
-        note = self.get_object(request, pk)
-        if note is None:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-        serializer = NoteSerializer(note)
-        return Response(serializer.data)
-
-    
-    def put(self, request, pk, format=None):
-
-        note = self.get_object(request, pk)
-        if note is None:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        try:
-             data = request.data
-             data['owner'] = request.user.id
-        except AttributeError:
-            data = request.data.dict()
-            data['owner'] = request.user.id
-        
-        serializer = NoteSerializer(note, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors ,status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-
-        note = self.get_object(request, pk)
-        if note is None:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        note.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
