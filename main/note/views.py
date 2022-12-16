@@ -1,66 +1,83 @@
 from note.models import Note
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
 #DRF Imports
 
-from rest_framework.decorators import api_view
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import permission_classes
+from rest_framework.views import APIView
 
 from note.serializers import NoteSerializer
-from note.permissions import OwnsThisObject
 
-@api_view(['GET','POST'])
-def note_list(request, format=None):
 
-    if request.method == 'GET':
+class NoteList(APIView):
 
-        notes = Note.objects.filter(owner=request.user)
+    def get(self, request, format=None):
+
+        user = request.user
+        notes = Note.objects.filter(owner=user)
         serializer = NoteSerializer(notes, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request, format=None):
 
-        data = request.data
-        request_user_id = request.user.id
-        data['owner'] = request_user_id
+        try:
+             data = request.data
+             data['owner'] = request.user.id
+        except AttributeError:
+            data = request.data.dict()
+            data['owner'] = request.user.id
+    
         serializer = NoteSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
+
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET','PUT','DELETE'])
-def note_content(request, pk, format=None):
+class NoteContent(APIView):
 
-    try:
-        note = Note.objects.get(pk=pk)
-        if note.owner != request.user:
+    def get_object(self, request, pk):
+        note = get_object_or_404(Note, pk=pk)
+        if request.user == note.owner:
+            return note
+        return None
+        
+    def get(self, request, pk, format=None):
+        
+        note = self.get_object(request, pk)
+        if note is None:
             return Response(status=status.HTTP_403_FORBIDDEN)
-    except Note.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == "GET":
-        serializer = NoteSerializer(note)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    elif request.method == "PUT":
-        data = request.data
-        request_user_id = request.user.id
-        data['owner'] = request_user_id
-        serializer = NoteSerializer(note,data=data)
+        serializer = NoteSerializer(note)
+        return Response(serializer.data)
+
+    
+    def put(self, request, pk, format=None):
+
+        note = self.get_object(request, pk)
+        if note is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        try:
+             data = request.data
+             data['owner'] = request.user.id
+        except AttributeError:
+            data = request.data.dict()
+            data['owner'] = request.user.id
+        
+        serializer = NoteSerializer(note, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
+        return Response(serializer.errors ,status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+
+        note = self.get_object(request, pk)
+        if note is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
