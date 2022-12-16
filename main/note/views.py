@@ -15,7 +15,7 @@ from note.models import Note
 from note.permissions import OwnsThisObject, IsAuthAndOwnsObject
 
 
-class NoteList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class NoteList(generics.ListCreateAPIView):
 
     serializer_class = NoteSerializer
 
@@ -36,16 +36,7 @@ class NoteList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-class NoteContent(mixins.RetrieveModelMixin, 
-                    mixins.UpdateModelMixin, 
-                    mixins.DestroyModelMixin, 
-                    generics.GenericAPIView):
+class NoteContent(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
@@ -64,13 +55,3 @@ class NoteContent(mixins.RetrieveModelMixin,
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
